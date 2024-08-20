@@ -1,5 +1,23 @@
 # TG-ODE
-This repository provides the official reference implementation of our paper **_"Temporal Graph ODEs for Irregularly-Sampled Time Series"_** accepted at the International Joint Conference on Artificial  Intelligence (IJCAI) 2024
+This repository provides the official reference implementation of our paper **_"Temporal Graph ODEs for Irregularly-Sampled Time Series"_** accepted at the International Joint Conference on Artificial  Intelligence (IJCAI) 2024.
+
+Please consider citing us
+
+	@inproceedings{gravina2024tgode,
+	  title     = {Temporal Graph ODEs for Irregularly-Sampled Time Series},
+	  author    = {Gravina, Alessio and Zambon, Daniele and Bacciu, Davide and Alippi, Cesare},
+	  booktitle = {Proceedings of the Thirty-Third International Joint Conference on
+               Artificial Intelligence, {IJCAI-24}},
+	  publisher = {International Joint Conferences on Artificial Intelligence Organization},
+	  editor    = {Kate Larson},
+	  pages     = {4025--4034},
+	  year      = {2024},
+	  month     = {8},
+	  note      = {Main Track},
+	  doi       = {10.24963/ijcai.2024/445},
+	  url       = {https://doi.org/10.24963/ijcai.2024/445},
+	}
+
 
 
 
