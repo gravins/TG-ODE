@@ -1,5 +1,5 @@
 # TG-ODE
-This repository provides the official reference implementation of our paper **_"Temporal Graph ODEs for Irregularly-Sampled Time Series"_** accepted at the International Joint Conference on Artificial  Intelligence (IJCAI) 2024.
+This repository provides the official reference implementation of our paper [**_"Temporal Graph ODEs for Irregularly-Sampled Time Series"_**](https://www.ijcai.org/proceedings/2024/445) accepted at the International Joint Conference on Artificial  Intelligence (IJCAI) 2024.
 
 Please consider citing us
 
