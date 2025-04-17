@@ -39,7 +39,7 @@ Then:
 
 ```
 export data="" # choose one from ['metrla', 'pems03', 'pems04', 'pems07', 'pems08', 'montevideo', 'heat', 'pow_2_heat', 'pow_5_heat', 'tanh_heat', 'expand_heat', 'reduce_heat', 'gaussian_noise_heat']
-export model="" # choose one from ['DCRNN', 'GCRN_LSTM', 'GCRN_GRU', 'TGCN', 'A3TGCN', 'NODE', 'GDE', 'TGODE']
+export model="" # choose one from ['DCRNN', 'GCRN_LSTM', 'GCRN_GRU', 'TGCN', 'A3TGCN', 'NODE', 'GDE', 'TGODE', 'LB_baseline'] #NOTE that for the LB_baseline you can set the num of epochs to be 1
 export NUM_CPUS=90 # number of available cpus for the entire experiment
 export PERC_GPUS=0.0 # percentage of gpus for one configuration
 export CUDA_VISIBLE_DEVICES="" # list of cuda visible devices
