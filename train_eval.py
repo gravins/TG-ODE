@@ -7,6 +7,7 @@ import pickle
 import tqdm
 import ray
 import random
+from conf import LB_baseline_name
 
 def optimizer_to(optim, device):
     # Code from https://discuss.pytorch.org/t/moving-optimizer-from-cpu-to-gpu/96068/3
@@ -104,9 +105,13 @@ def train_and_eval_single(model_instance, opt):
 
     model = model_instance(**opt['model_params']).to(device)
 
-    optimizer = torch.optim.Adam(model.parameters(),
-                                 lr=opt['optim_params']['lr'],
-                                 weight_decay=opt['optim_params']['weight_decay'])
+    is_LB_baseline = LB_baseline_name in opt['exp']['exp_name']
+    
+    if not is_LB_baseline:
+        optimizer = torch.optim.Adam(model.parameters(),
+                                    lr=opt['optim_params']['lr'],
+                                    weight_decay=opt['optim_params']['weight_decay'])
+        
     if opt['exp']['criterion'] == 'MAE':
         criterion = torch.nn.L1Loss()
     elif opt['exp']['criterion'] == 'MSE':
@@ -123,7 +128,7 @@ def train_and_eval_single(model_instance, opt):
     path_save_best = os.path.join(opt["exp"]["ckpt_dir"], f'{opt["exp"]["exp_name"]}_{opt["conf_name"]}.pt')
     
     # LOAD previuos ckpt if exists
-    if os.path.exists(path_save_best):
+    if (not is_LB_baseline) and os.path.exists(path_save_best):
         # Load the existing checkpoint
         print(f'Loading {path_save_best}')
         ckpt = torch.load(path_save_best, map_location=device)
@@ -159,7 +164,8 @@ def train_and_eval_single(model_instance, opt):
     # RUN experiment
     for epoch in range(best_epoch, epochs): #tqdm.tqdm(range(opt['exp']['epochs'])):
         #print(f'Epoch {epoch}:')
-        train(model, tr_loader, optimizer, criterion, device, x_scaler, t_scaler)
+        if not is_LB_baseline:
+            train(model, tr_loader, optimizer, criterion, device, x_scaler, t_scaler)
         
         # Check the scores 
         tr_loss, tr_y_true, tr_y_pred = eval(model, tr_loader, criterion, device, x_scaler, t_scaler) 
@@ -184,29 +190,30 @@ def train_and_eval_single(model_instance, opt):
             
             best_score = (tr_loss, vl_loss, ts_loss)
             best_epoch = epoch
-            # Save checkpoint
-            torch.save({
-                'epoch': epoch,
-                'model_state_dict': model.state_dict(),
-                'optimizer_state_dict': optimizer.state_dict(),
-                'best_score': best_score,
-                'loss': best_score,
-                'tr_other_scores': tr_other_scores,
-                'vl_other_scores': vl_other_scores,
-                'ts_other_scores': ts_other_scores,
-                'best_ts_y_true': best_ts_y_true, 
-                'best_ts_y_pred': best_ts_y_pred,
-                'history': history,
-                'train_ended': False
-            }, path_save_best)
+            if not is_LB_baseline:
+                # Save checkpoint
+                torch.save({
+                    'epoch': epoch,
+                    'model_state_dict': model.state_dict(),
+                    'optimizer_state_dict': optimizer.state_dict(),
+                    'best_score': best_score,
+                    'loss': best_score,
+                    'tr_other_scores': tr_other_scores,
+                    'vl_other_scores': vl_other_scores,
+                    'ts_other_scores': ts_other_scores,
+                    'best_ts_y_true': best_ts_y_true, 
+                    'best_ts_y_pred': best_ts_y_pred,
+                    'history': history,
+                    'train_ended': False
+                }, path_save_best)
         
         if epoch - best_epoch > opt['exp']['patience']:
             break
 
-
-    ckpt = torch.load(path_save_best)
-    ckpt['train_ended'] = True
-    torch.save(ckpt, path_save_best)
+    if not is_LB_baseline:
+        ckpt = torch.load(path_save_best)
+        ckpt['train_ended'] = True
+        torch.save(ckpt, path_save_best)
 
     print(f'{opt["model_params"]}, {opt["optim_params"]}: Ended [{best_epoch}] Train {opt["exp"]["criterion"]}: {best_score[0]}, Val {opt["exp"]["criterion"]}: {best_score[1]}, Test {opt["exp"]["criterion"]}: {best_score[2]}, other Test {history[best_epoch]["ts_other_scores"]}')
     

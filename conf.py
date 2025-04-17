@@ -152,6 +152,14 @@ def get_conf_node(model_name, input_dim, output_dim, time_dim):
                                         raise ValueError(f'{model_name} is not defined')
 
 
+def get_conf_LBbaseline():
+    conf =  {
+        'model': {},
+        'optim': {}
+    }
+    yield conf
+
+
 def get_data_config(name: str, single_spike: bool = False): # is one of dataset.DATA_NAMES
     if name in diffusion_functions.keys():
         h, w = 10, 7
@@ -187,6 +195,9 @@ c3 = lambda input_dim, output_dim, time_dim: get_conf_baseline('TGCN', input_dim
 c4 = lambda input_dim, output_dim, time_dim: get_conf_baseline('A3TGCN', input_dim, output_dim, time_dim)
 c5 = lambda input_dim, output_dim, time_dim: get_conf_node('NODE', input_dim, output_dim, time_dim)
 c6 = lambda input_dim, output_dim, time_dim: get_conf_node('NDCN', input_dim, output_dim, time_dim)
+c7 = lambda input_dim, output_dim, time_dim: get_conf_LBbaseline()
+
+LB_baseline_name = 'LB_baseline'
 
 MODEL_CONF = {
     'TGODE': (our, TemporalGraphEuler), # Our method
@@ -197,5 +208,6 @@ MODEL_CONF = {
     'TGCN': (c3, TGCNModel), 
     'A3TGCN': (c4, A3TGCNModel),
     'NODE': (c5, NeuralODE),
-    'NDCN': (c6, NDCN)
+    'NDCN': (c6, NDCN),
+    LB_baseline_name: (c7, LB_baseline)
 }

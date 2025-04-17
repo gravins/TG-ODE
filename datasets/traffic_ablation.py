@@ -58,17 +58,17 @@ class TrafficAblationDataset(InMemoryDataset):
 
             timestamp = df.index[to_keep[i]]
             
-            encoded_timestamp = torch.tensor([
-                np.sin(2 * np.pi * timestamp.minute/60),
-                np.cos(2 * np.pi * timestamp.minute/60),
-                np.sin(2 * np.pi * timestamp.hour/24),
-                np.cos(2 * np.pi * timestamp.hour/24),
-                np.sin(2 * np.pi * timestamp.day/31),
-                np.cos(2 * np.pi * timestamp.day/31),
-                np.sin(2 * np.pi * timestamp.month/12),
-                np.cos(2 * np.pi * timestamp.month/12),
-            ], dtype=torch.float)
-            encoded_timestamp = encoded_timestamp.repeat(x.shape[0],1)
+            # encoded_timestamp = torch.tensor([
+            #     np.sin(2 * np.pi * timestamp.minute/60),
+            #     np.cos(2 * np.pi * timestamp.minute/60),
+            #     np.sin(2 * np.pi * timestamp.hour/24),
+            #     np.cos(2 * np.pi * timestamp.hour/24),
+            #     np.sin(2 * np.pi * timestamp.day/31),
+            #     np.cos(2 * np.pi * timestamp.day/31),
+            #     np.sin(2 * np.pi * timestamp.month/12),
+            #     np.cos(2 * np.pi * timestamp.month/12),
+            # ], dtype=torch.float)
+            # encoded_timestamp = encoded_timestamp.repeat(x.shape[0],1)
             
             data_list.append(
                 Data(

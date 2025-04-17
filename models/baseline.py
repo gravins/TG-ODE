@@ -9,6 +9,14 @@ from torch_geometric.utils import get_laplacian
 from torch_geometric.nn import GCNConv
 
 
+class LB_baseline(Module):
+    def __init__(self, *args, **kwargs):
+        super().__init__()
+        
+    def forward(self, data: Data, prev_h: Optional[torch.Tensor]=None) -> torch.Tensor:
+        return data.x, data.x
+
+
 class SpatioTemporalModel(Module):
     def __init__(self,                  
                  input_dim: int,
